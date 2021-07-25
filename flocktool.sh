@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+
+
 ## author: Mikhail Kost
 ## version: 0.1.4.1
 ## This script contains details in order to make the communication in Flock easier.
@@ -65,7 +67,7 @@ function setValues() {
   done
   for i in $1 $2 $3
     do
-      if [[ $i =~ ^[a-zA-Z]+$ ]]; then
+      if [[ $i =~ ^[a-zA-Z0-9]+$ ]]; then
          username=${i:-$defvalue}
          break;
        else username=$defvalue
