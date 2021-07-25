@@ -604,6 +604,110 @@ Thank you in advance!
  fi
 }
 
+function russianChat() {
+  echo -ne "
+---------------------------------------------------
+
+@online Hello there! Could someone accept Russian chat?
+
+# Chat ID: $chat
+# Domain: $domain
+# Username: $username (verified)
+# Desription:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  generaldomains_menu "$chat" "$domain" "$username";
+ fi
+}
+
+function transferIssues() {
+  echo -ne "
+---------------------------------------------------
+
+@online Hello there L2 guys! Unfortunately, skillset is not working properly. Could someone accept the chat?
+
+# Chat ID: $chat
+# Domain: $domain
+# Username: $username (verified)
+# Desription:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  generaldomains_menu "$chat" "$domain" "$username";
+ fi
+}
+
+function shiftDelegation() {
+  echo -ne "
+---------------------------------------------------
+
+@online Hello morning/evening/night, here is your shift delegation:
+
+SL:
+SMEs:
+RR/BR: me
+TR:
+
+Wish you all a good one!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  generaldomains_menu "$chat" "$domain" "$username";
+ fi
+}
+
+function exchangeDo() {
+  echo -ne "
+---------------------------------------------------
+
+@all @online Hello guys, I need a DO on ... . I can offer my DOs on: ... . Feel free ro contact me anywhere.
+
+L1/L2
+ID:
+Phone number:
+TG:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  shiftswap_menu "$chat" "$domain" "$username";
+ fi
+}
+
+function exchangeShift() {
+  echo -ne "
+---------------------------------------------------
+
+@all @online Hello guys, I need to change my morning/evening/night shift on ... to your morning/evening/night. Feel free ro contact me anywhere.
+
+L1/L2
+ID:
+Phone number:
+TG:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  shiftswap_menu "$chat" "$domain" "$username";
+ fi
+}
 
 setValues "$1" "$2" "$3" "$defvalue"
 
@@ -635,7 +739,8 @@ $(ColorBlue 'Choose an option(0-6):')"
 	        2) billing_menu "$chat" "$domain"; "$username" ;;
 	        3) riskmanagement_menu "$chat" "$domain"; "$username" ;;
 	        4) privateemail_menu "$chat" "$domain"; "$username" ;;
-	        5) all_checks ; menu ;;
+	        5) generaldomains_menu "$chat" "$domain"; "$username" ;;
+					6) shiftswap_menu "$chat" "$domain"; "$username" ;;
 		    	0) exit 0 ;;
 			*) echo -e $red"Wrong option. Exit."$clear; exit 0;;
         esac
@@ -644,7 +749,7 @@ $(ColorBlue 'Choose an option(0-6):')"
 function domains_hosting_menu() {
     echo -ne "---------------------------------------------------
 
-    $(ColorGreen 'CS: Domains-Hosting') | Procedure: How to transfer chats between Domain and Hosting departments
+    $(ColorGreen 'CS: Domains-Hosting')
 
 $(ColorGreen '1)') Synchronize the DNS zone for $domain .
 $(ColorGreen '2)') Ask for the FU.
@@ -680,7 +785,7 @@ $(ColorBlue 'Choose an option(0-10):')"
 function billing_menu() {
     echo -ne "---------------------------------------------------
 
-    $(ColorGreen 'CS: Billing') | Procedure: Processing Billing-related customers' requests
+    $(ColorGreen 'CS: Billing')
 
 $(ColorGreen '1)') Check the PayPal Invoice ID for matches.
 $(ColorGreen '2)') Phone call.
@@ -744,7 +849,7 @@ $(ColorGreen '1)') Ask for the FU.
 
 $(ColorGreen '0)') Back
 
-$(ColorBlue 'Choose an option(0-4):')"
+$(ColorBlue 'Choose an option(0-1):')"
     read a
     case $a in
       1) askPeFu ;;
@@ -752,5 +857,48 @@ $(ColorBlue 'Choose an option(0-4):')"
       *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
     esac
 }
+
+function generaldomains_menu() {
+    echo -ne "---------------------------------------------------
+
+    $(ColorGreen 'CS: Domains & General')
+
+$(ColorGreen '1)') Russian chat.
+$(ColorGreen '2)') L2 chat transfer issues.
+$(ColorGreen '3)') Shift delegation (For Domain's RR).
+
+$(ColorGreen '0)') Back
+
+$(ColorBlue 'Choose an option(0-3):')"
+    read a
+    case $a in
+      1) russianChat ;;
+			2) transferIssues ;;
+			3) shiftDelegation ;;
+      0) menu "$chat" "$domain" "$username";;
+      *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
+    esac
+}
+
+function shiftswap_menu() {
+    echo -ne "---------------------------------------------------
+
+    $(ColorGreen 'CS: Domain Shifts Swap')
+
+$(ColorGreen '1)') Exchange DO.
+$(ColorGreen '2)') Exchange Shift.
+
+$(ColorGreen '0)') Back
+
+$(ColorBlue 'Choose an option(0-2):')"
+    read a
+    case $a in
+      1) exchangeDo ;;
+			2) exchangeShift ;;
+      0) menu "$chat" "$domain" "$username";;
+      *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
+    esac
+}
+
 
 menu "$chat" "$domain" "$username"
