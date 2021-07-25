@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+## author: Mikhail Kost
+## version: 0.1.4.1
+## This script contains details in order to make the communication in Flock easier.
+
 ##
 # Color  Variables
 ##
