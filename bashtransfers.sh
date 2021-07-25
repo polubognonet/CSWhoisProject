@@ -483,7 +483,7 @@ function creditCardExp() {
 # Chat ID: $chat
 # Username: $username
 # Expiration date:
-# Last 4 digits for the credit card: 
+# Last 4 digits for the credit card:
 
 Thank you in advance!
 
@@ -495,14 +495,125 @@ Thank you in advance!
  fi
 }
 
+function greenFlag() {
+  echo -ne "
+
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+
+---------------------------------------------------
+
+@ Hello there! Client is asking to check the ticket with a green flag. Could you check?
+
+# Chat ID: $chat
+# Ticket ID:
+# Username: $username
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  riskmanagement_menu "$chat" "$domain"; "$username"
+ fi
+}
+
+function hackingClaim() {
+  echo -ne "
+
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+
+---------------------------------------------------
+
+@ Hello there! Client claims that the account was hacked. Here is a hacking claim ticket. Could you check?
+
+# Chat ID: $chat
+# Ticket ID:
+# Username: $username
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  riskmanagement_menu "$chat" "$domain"; "$username"
+ fi
+}
+
+function unauthorizedCharge() {
+  echo -ne "
+
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+
+---------------------------------------------------
+
+@ Hello there! Client claims that there are some unauthorzed charges from their account. Here is a ticket. Could you check?
+
+# Chat ID: $chat
+# Ticket ID:
+# Username: $username
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  riskmanagement_menu "$chat" "$domain"; "$username"
+ fi
+}
+
+function bigOrder() {
+  echo -ne "
+
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+
+---------------------------------------------------
+
+@ Hello there! Here is an order for more than \$1000 on our Marketplace. Could you check?
+
+# Order ID:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  riskmanagement_menu "$chat" "$domain"; "$username"
+ fi
+}
+
+function askPeFu() {
+  echo -ne "
+---------------------------------------------------
+
+@ Hello there! Please submit a FU for the client:
+
+# Chat ID: $chat
+# Description:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  privateemail_menu "$chat" "$domain" "$username";
+ fi
+}
+
+
 setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
 echo -ne "
 # Hello $(ColorGreen "Domain's CS")
 # This script is created in order to make the communication in Flock rooms easier and faster.
+# Please contact me if you have any feedback or ideas to implement.
 # author: Mikhail Kost
-# version: 0.1
+# version: 0.1.1
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
@@ -522,8 +633,8 @@ $(ColorBlue 'Choose an option(0-6):')"
         case $a in
 	        1) domains_hosting_menu "$chat" "$domain"; "$username" ;;
 	        2) billing_menu "$chat" "$domain"; "$username" ;;
-	        3) tcp_check ; menu ;;
-	        4) kernel_check ; menu ;;
+	        3) riskmanagement_menu "$chat" "$domain"; "$username" ;;
+	        4) privateemail_menu "$chat" "$domain"; "$username" ;;
 	        5) all_checks ; menu ;;
 		    	0) exit 0 ;;
 			*) echo -e $red"Wrong option. Exit."$clear; exit 0;;
@@ -533,7 +644,7 @@ $(ColorBlue 'Choose an option(0-6):')"
 function domains_hosting_menu() {
     echo -ne "---------------------------------------------------
 
-    $(ColorGreen 'CS: Domains-Hosting')
+    $(ColorGreen 'CS: Domains-Hosting') | Procedure: How to transfer chats between Domain and Hosting departments
 
 $(ColorGreen '1)') Synchronize the DNS zone for $domain .
 $(ColorGreen '2)') Ask for the FU.
@@ -569,7 +680,7 @@ $(ColorBlue 'Choose an option(0-10):')"
 function billing_menu() {
     echo -ne "---------------------------------------------------
 
-    $(ColorGreen 'CS: Billing')
+    $(ColorGreen 'CS: Billing') | Procedure: Processing Billing-related customers' requests
 
 $(ColorGreen '1)') Check the PayPal Invoice ID for matches.
 $(ColorGreen '2)') Phone call.
@@ -583,7 +694,7 @@ $(ColorGreen '9)') Check the credit card expiration date for matches.
 
 $(ColorGreen '0)') Back
 
-$(ColorBlue 'Choose an option(0-8):')"
+$(ColorBlue 'Choose an option(0-9):')"
     read a
     case $a in
       1) paypalInvoice ;;
@@ -595,6 +706,48 @@ $(ColorBlue 'Choose an option(0-8):')"
       7) creditCardCharges ;;
       8) paymentSourceChange ;;
       9) creditCardExp ;;
+      0) menu "$chat" "$domain" "$username";;
+      *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
+    esac
+}
+
+function riskmanagement_menu() {
+    echo -ne "---------------------------------------------------
+
+    $(ColorGreen 'CS: Risk Management')
+
+$(ColorGreen '1)') Client came with a green-flag ticket.
+$(ColorGreen '2)') Hacking claim.
+$(ColorGreen '3)') Unauthorized charge.
+$(ColorGreen '4)') More than \$1000 Marketplace order. (For Domains RR).
+
+$(ColorGreen '0)') Back
+
+$(ColorBlue 'Choose an option(0-4):')"
+    read a
+    case $a in
+      1) greenFlag ;;
+      2) hackingClaim ;;
+      3) unauthorizedCharge ;;
+      4) bigOrder ;;
+      0) menu "$chat" "$domain" "$username";;
+      *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
+    esac
+}
+
+function privateemail_menu() {
+    echo -ne "---------------------------------------------------
+
+    $(ColorGreen 'Private Email CS team')
+
+$(ColorGreen '1)') Ask for the FU.
+
+$(ColorGreen '0)') Back
+
+$(ColorBlue 'Choose an option(0-4):')"
+    read a
+    case $a in
+      1) askPeFu ;;
       0) menu "$chat" "$domain" "$username";;
       *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
     esac
