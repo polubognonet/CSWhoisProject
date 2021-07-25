@@ -717,11 +717,11 @@ setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
 echo -ne "
-# Hello $(ColorGreen "Domain's CS")
-# This script is created in order to make the communication in Flock rooms easier and faster.
-# Please contact me if you have any feedback or ideas to implement.
+# Hello $(ColorGreen "Domain's CS representative")
+# This script is created in order to make the communication in Flock rooms easier and faster
+# Contact me if you have any: feedbacks / ideas to implement / bug reports
 # author: Mikhail Kost
-# version: 0.1.1
+# version: 0.1.5
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
