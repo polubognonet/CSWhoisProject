@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-
-
-
 ## author: Mikhail Kost
-## version: 0.1.4.1
+## version: 0.1.6.1
 ## This script contains details in order to make the communication in Flock easier.
 
 ##
@@ -12,6 +9,7 @@
 green='\e[32m'
 blue='\e[94m'
 red='\e[31m'
+lightred='\e[91m'
 clear='\e[0m'
 
 ##
@@ -27,7 +25,9 @@ ColorBlue(){
 ColorRed(){
 	echo -ne $red$1$clear
 }
-
+ColorLightRed(){
+	echo -ne $lightred$1$clear
+}
 ##
 # Default variables
 ##
@@ -79,7 +79,7 @@ function setValues() {
 function syncTheDNS() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -104,7 +104,7 @@ fi
 function backupCheck() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -150,7 +150,7 @@ Thank you in advance!
 function resendHostingEmail() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -173,7 +173,7 @@ $(ColorBlue 'Enter 0 to go back:')"
 function createPeRecords() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -196,7 +196,7 @@ Thank you in advance!
 function createGoogleRecords() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -220,7 +220,7 @@ function createRecords() {
 
 echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -245,7 +245,7 @@ function checkIpAddress() {
 
 echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -270,7 +270,7 @@ function suspendedHosting() {
 
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -293,7 +293,7 @@ Thank you in advance!
 function enableSSH() {
   echo -ne "
 
-$(ColorRed 'Please do not forget to mention the responsible person in the Flock room.')
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
 
 ---------------------------------------------------
 
@@ -377,6 +377,9 @@ Thank you in advance!
 
 function changeBillingCycle() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Client would like to change the billing cycle for the hosting account. Could you check?
@@ -398,6 +401,9 @@ Thank you in advance!
 
 function postponePayment() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Client is asking for the postponement for their hosting plan. Could you check it?
@@ -420,6 +426,9 @@ Thank you in advance!
 
 function refundRequest() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Please withdraw the amount from the client's account to the source of payment.
@@ -440,6 +449,9 @@ Thank you in advance!
 
 function creditCardCharges() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Client claims that there are some credit card charges. However, I cannot locate it in the account. Could you check it?
@@ -462,6 +474,9 @@ Thank you in advance!
 
 function paymentSourceChange() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Could you check if that is possible to change the source of payment for the recent transaction?
@@ -531,7 +546,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Client claims that the account was hacked. Here is a hacking claim ticket. Could you check?
+@ Hello there! Client claims that account was hacked. Here is a hacking claim ticket. Could you check?
 
 # Chat ID: $chat
 # Ticket ID:
@@ -612,6 +627,9 @@ Thank you in advance!
 
 function russianChat() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there! Could someone accept Russian chat?
@@ -633,6 +651,9 @@ Thank you in advance!
 
 function transferIssues() {
   echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
 ---------------------------------------------------
 
 @online Hello there L2 guys! Unfortunately, skillset is not working properly. Could someone accept the chat?
@@ -718,12 +739,13 @@ Thank you in advance!
 setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
+iam=$(whoami)
 echo -ne "
 # Hello $(ColorGreen "Domain's CS representative")
 # This script is created in order to make the communication in Flock rooms easier and faster
 # Contact me if you have any: feedbacks / ideas to implement / bug reports
 # author: Mikhail Kost
-# version: 0.1.5
+# version: 0.1.6
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
@@ -738,6 +760,8 @@ $(ColorGreen '5)') CS: Domains & General
 $(ColorGreen '6)') CS: Domain Shifts Swap
 $(ColorGreen '0)') Exit
 
+$(ColorGreen '99)') How to use?
+
 $(ColorBlue 'Choose an option(0-6):')"
         read a
         case $a in
@@ -747,6 +771,7 @@ $(ColorBlue 'Choose an option(0-6):')"
 	        4) privateemail_menu "$chat" "$domain"; "$username" ;;
 	        5) generaldomains_menu "$chat" "$domain"; "$username" ;;
 					6) shiftswap_menu "$chat" "$domain"; "$username" ;;
+					99) howtouse "$chat" "$domain"; "$username" ;;
 		    	0) exit 0 ;;
 			*) echo -e $red"Wrong option. Exit."$clear; exit 0;;
         esac
@@ -905,6 +930,50 @@ $(ColorBlue 'Choose an option(0-2):')"
       *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
     esac
 }
+
+function howtouse() {
+	echo -ne "
+##############################################################
+
+  	 $(ColorLightRed 'How to use FlockTool')
+
+FlockTool is an easy-coded script that is used in order to make the communication between CS deparments easier.
+There are different menus where you can choose the way you would like to proceed.
+
+$(ColorBlue 'Choose an option(0-2):') <=== Enter the required number and press 'Enter'
+
+After that, you will be forwarded to another menu with the options to select.
+
+FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').
+After this command, script will use the $(ColorBlue 'namecheap.com')  as domain name, $(ColorBlue 'VQR-833-40788') as chat ID and $(ColorBlue 'webdev') as Username. These details will be changed atomatically for your canned replies.
+
+Here it is an example:
+
+$(ColorLightRed '---------------------------------------------------')
+
+@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
+
+# Chat ID: $(ColorBlue 'VQR-833-40788')
+# Domain: $(ColorBlue 'namecheap.com')
+# Username: $(ColorBlue 'webdev') (verified)
+# Records that should be created:
+
+Thank you in advance!
+
+$(ColorLightRed '---------------------------------------------------')
+
+If you have any comments or bug reports, feel free to contact me (Mikhail Kost) via Flock or $(ColorBlue 'mikhail.kost@namecheap.com') email address (please add $(ColorBlue 'Script Feedback') to the subject of your email).
+What is more, I am very excited to check your ideas that could be impletemented here.
+
+##############################################################
+
+$(ColorBlue 'Enter 0 to go back:')"
+
+	read b
+	if [[ $b == "0" ]]; then
+	 menu "$chat" "$domain" "$username";
+	fi
+ }
 
 
 menu "$chat" "$domain" "$username"
