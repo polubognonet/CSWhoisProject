@@ -36,10 +36,24 @@ defvalue="..."
 domain="..."
 chat="..."
 username="..."
+datenow=`date +%H`
 
 ##
 # Functions
 ##
+
+function checkDate () {
+ datafromfile=$(<data.txt)
+ hourfromtext=${datafromfile//[!0-9]/}
+ if (( $datenow > $hourfromtext )); then
+ 	difference= expr $datenow - $hourfromtext
+elif (( $datenow == $hourfromtext )); then
+	difference= expr 1 - 1
+ else
+	difference= expr 24 - $hourfromtext + $datenow
+ fi
+ return $difference
+}
 
 function setValues() {
   for i in $1 $2 $3
@@ -764,12 +778,15 @@ setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
 iam=$(whoami)
+lasthour=$(checkDate)
 echo -ne "
 # Hello $(ColorGreen "Domain's CS representative")
 # This script is created in order to make the communication in Flock rooms easier and faster
 # Contact me if you have any: feedbacks / ideas to implement / bug reports
 # author: Mikhail Kost
 # version: 0.1.6
+
+# Last Hosting RR update: $lasthour hours.
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
@@ -1001,5 +1018,18 @@ $(ColorBlue 'Enter 0 to go back:')"
 	fi
  }
 
-
-menu "$chat" "$domain" "$username"
+if [[ $1 == "setRR" ]]; then
+	echo "Please enter Hosting RR on this shift:"
+	read hostingRR
+	echo $hostingRR > data.txt
+	currentdata=`date +%H`
+	echo $currentdata >> data.txt
+	echo "Updated Hosting RR: $hostingRR"
+	echo "Enter 0 to exit"
+	read c
+		if [[ $c == "0" ]]; then
+			exit
+		fi
+else
+	menu "$chat" "$domain" "$username"
+fi
