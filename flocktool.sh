@@ -36,12 +36,10 @@ defvalue="..."
 domain="..."
 chat="..."
 username="..."
+
 ##
 # Functions
 ##
-
-
-
 
 function setValues() {
   for i in $1 $2 $3
@@ -85,7 +83,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please synchronize the DNS zone for the domain name.
+@ Hello there! Please synchronize the DNS zone for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -110,7 +108,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Could you check if we have a backup for the hosting account?
+@ Hello there! Could you check if we have a backup for the hosting account?
 
 # Chat ID: $chat
 # Domain: $domain
@@ -134,7 +132,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please submit a FU for the client.
+@ Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
@@ -156,7 +154,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please add the domain name as addon to the hosting account.
+@ Hello there! Please add the domain name as addon to the hosting account.
 
 # Chat ID: $chat
 # Username: $username (verified)
@@ -180,7 +178,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please resend Hosting Welcome email for the client.
+@ Hello there! Please resend Hosting Welcome email for the client.
 
 # Chat ID: $chat
 # Main Domain: $domain
@@ -203,7 +201,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please create all necessary PE records for the domain name.
+@ Hello there! Please create all necessary PE records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -226,7 +224,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please create Google Workspace MX records for the domain name.
+@ Hello there! Please create Google Workspace MX records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -250,7 +248,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
+@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -275,7 +273,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please check if there are any blocks for the IP address.
+@ Hello there! Please check if there are any blocks for the IP address.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -300,7 +298,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Could you check the reason of suspension for the hosting account?
+@ Hello there! Could you check the reason of suspension for the hosting account?
 
 # Chat ID: $chat
 # Domain: $domain
@@ -323,7 +321,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@$currentHostingRR Hello there! Please enable the SSH access for the client.
+@ Hello there! Please enable the SSH access for the client.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -766,7 +764,6 @@ setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
 iam=$(whoami)
-lasthour=$(checkDate)
 echo -ne "
 # Hello $(ColorGreen "Domain's CS representative")
 # This script is created in order to make the communication in Flock rooms easier and faster
@@ -774,11 +771,6 @@ echo -ne "
 # author: Mikhail Kost
 # version: 0.1.6
 
-"
-
-echo $hostingRR
-
-echo -ne "
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
 
@@ -981,13 +973,11 @@ After that, you will be forwarded to another menu with the options to select.
 FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').
 After this command, script will use the $(ColorBlue 'namecheap.com')  as domain name, $(ColorBlue 'VQR-833-40788') as chat ID and $(ColorBlue 'webdev') as Username. These details will be changed atomatically for your canned replies.
 
-What is more, it is possible to set current Hosting RR on the shift by using the $(ColorBlue './flocktool.sh setRR') command. After that, the required inormation will be inserted in database.
-
 Here it is an example:
 
 $(ColorLightRed '---------------------------------------------------')
 
-@$(ColorBlue 'Mikhail Kost') Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
+@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
 
 # Chat ID: $(ColorBlue 'VQR-833-40788')
 # Domain: $(ColorBlue 'namecheap.com')
@@ -1011,18 +1001,5 @@ $(ColorBlue 'Enter 0 to go back:')"
 	fi
  }
 
-if [[ $1 == "setRR" ]]; then
-	echo "
-$(ColorGreen 'Please enter Hosting RR on this shift:')"
-	read hostingRR
-	echo "
-Updated Hosting RR: $hostingRR"
-	echo "Enter 0 to exit"
-	export hostingRR
-	read c
-		if [[ $c == "0" ]]; then
-			exit
-		fi
-else
-	menu "$chat" "$domain" "$username" "$hostingRR"
-fi
+
+menu "$chat" "$domain" "$username"
