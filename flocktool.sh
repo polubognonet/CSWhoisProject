@@ -83,7 +83,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please synchronize the DNS zone for the domain name:
+@ Hello there! Please synchronize the DNS zone for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -132,10 +132,34 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please submit a FU for the client:
+@ Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  domains_hosting_menu "$chat" "$domain" "$username";
+ fi
+}
+
+function addAddon() {
+  echo -ne "
+
+$(ColorRed 'Please do not forget to mention the responsible person in the Flock room and make sure that the account is verified.')
+
+---------------------------------------------------
+
+@ Hello there! Please add the domain name as addon to the hosting account.
+
+# Chat ID: $chat
+# Username: $username (verified)
+# Domain that should be added:
+# Main domain for the hosting account:
 
 Thank you in advance!
 
@@ -154,7 +178,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please resend Hosting Welcome email for the client:
+@ Hello there! Please resend Hosting Welcome email for the client.
 
 # Chat ID: $chat
 # Main Domain: $domain
@@ -177,7 +201,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create all necessary PE records for the domain name:
+@ Hello there! Please create all necessary PE records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -200,7 +224,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create Google Workspace MX records for the domain name:
+@ Hello there! Please create Google Workspace MX records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -224,7 +248,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
+@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -249,7 +273,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please check if there are any blocks for the IP address:
+@ Hello there! Please check if there are any blocks for the IP address.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -297,7 +321,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please enable the SSH access for the client:
+@ Hello there! Please enable the SSH access for the client.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -317,7 +341,7 @@ function paypalInvoice() {
   echo -ne "
 ---------------------------------------------------
 
-@online Hello there! Please check if the PayPal Invoice ID is a match with the Username provided below:
+@online Hello there! Please check if the PayPal Invoice ID is a match with the Username provided below.
 
 # Chat ID: $chat
 # Username: $username
@@ -340,7 +364,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please arrange a phone call in order to verify the client:
+@ Hello there! Please arrange a phone call in order to verify the client.
 
 # Chat ID: $chat
 # Username: $username
@@ -360,7 +384,7 @@ function askBillingFu() {
   echo -ne "
 ---------------------------------------------------
 
-@online Hello there! Please submit a FU for the client:
+@online Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
@@ -610,7 +634,7 @@ function askPeFu() {
   echo -ne "
 ---------------------------------------------------
 
-@ Hello there! Please submit a FU for the client:
+@ Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
@@ -677,7 +701,7 @@ function shiftDelegation() {
   echo -ne "
 ---------------------------------------------------
 
-@online Hello morning/evening/night, here is your shift delegation:
+@online Hello morning/evening/night, here is your shift delegation.
 
 SL:
 SMEs:
@@ -784,14 +808,15 @@ function domains_hosting_menu() {
 
 $(ColorGreen '1)') Synchronize the DNS zone for $domain .
 $(ColorGreen '2)') Ask for the FU.
-$(ColorGreen '3)') Backup check for Shared/EasyWP.
-$(ColorGreen '4)') Re-send the Hosting Welcome email.
-$(ColorGreen '5)') Create host records for the $domain .
-$(ColorGreen '6)') Create all necessary PE records.
-$(ColorGreen '7)') Create Google Workspace MX records.
-$(ColorGreen '8)') Check the IP address for blocks.
-$(ColorGreen '9)') Check the reason of suspension for the hosting account.
-$(ColorGreen '10)') Enable SSH.
+$(ColorGreen '3)') Add addon to the Shared hosting account.
+$(ColorGreen '4)') Backup check for Shared/EasyWP.
+$(ColorGreen '5)') Re-send the Hosting Welcome email.
+$(ColorGreen '6)') Create host records for the $domain .
+$(ColorGreen '7)') Create all necessary PE records.
+$(ColorGreen '8)') Create Google Workspace MX records.
+$(ColorGreen '9)') Check the IP address for blocks.
+$(ColorGreen '10)') Check the reason of suspension for the hosting account.
+$(ColorGreen '11)') Enable SSH.
 
 $(ColorGreen '0)') Back
 
@@ -800,14 +825,15 @@ $(ColorBlue 'Choose an option(0-10):')"
     case $a in
       1) syncTheDNS ;;
       2) askFu ;;
-      3) backupCheck ;;
-      4) resendHostingEmail ;;
-      5) createRecords ;;
-      6) createPeRecords ;;
-      7) createGoogleRecords ;;
-      8) checkIpAddress ;;
-      9) suspendedHosting ;;
-      10) enableSSH ;;
+			3) addAddon ;;
+      4) backupCheck ;;
+      5) resendHostingEmail ;;
+      6) createRecords ;;
+      7) createPeRecords ;;
+      8) createGoogleRecords ;;
+      9) checkIpAddress ;;
+      10) suspendedHosting ;;
+      11) enableSSH ;;
       0) menu "$chat" "$domain" "$username";;
       *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
     esac
