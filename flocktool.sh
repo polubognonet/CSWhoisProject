@@ -36,25 +36,12 @@ defvalue="..."
 domain="..."
 chat="..."
 username="..."
-datenow=`date +%H`
-datafromfile=$(<data.txt)
-
 ##
 # Functions
 ##
 
 
-function checkDate () {
- hourfromtext=${datafromfile//[!0-9]/}
- if (( $datenow > $hourfromtext )); then
- 	difference= expr $datenow - $hourfromtext
-elif (( $datenow == $hourfromtext )); then
-	difference= expr 1 - 1
- else
-	difference= expr 24 - $hourfromtext + $datenow
- fi
- return $difference
-}
+
 
 function setValues() {
   for i in $1 $2 $3
@@ -789,15 +776,7 @@ echo -ne "
 
 "
 
-if (( lasthour <= 8 )); then
-	echo "$(ColorBlue '!') Last Hosting RR update: $lasthour hours. $(ColorBlue '!')"
-	currentHostingRR=$(head -n 1 data.txt)
-elif (( lasthour > 8 )); then
-	echo "$(ColorBlue '!') Last Hosting RR was updated more than 8 hours ago! $(ColorBlue '!')"
-	currentHostingRR=''
-fi
-
-
+echo $hostingRR
 
 echo -ne "
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
@@ -999,7 +978,7 @@ $(ColorBlue 'Choose an option(0-2):') <=== Enter the required number and press '
 
 After that, you will be forwarded to another menu with the options to select.
 
-FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').s
+FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').
 After this command, script will use the $(ColorBlue 'namecheap.com')  as domain name, $(ColorBlue 'VQR-833-40788') as chat ID and $(ColorBlue 'webdev') as Username. These details will be changed atomatically for your canned replies.
 
 What is more, it is possible to set current Hosting RR on the shift by using the $(ColorBlue './flocktool.sh setRR') command. After that, the required inormation will be inserted in database.
@@ -1036,16 +1015,14 @@ if [[ $1 == "setRR" ]]; then
 	echo "
 $(ColorGreen 'Please enter Hosting RR on this shift:')"
 	read hostingRR
-	echo $hostingRR > data.txt
-	currentdata=`date +%H`
-	echo $currentdata >> data.txt
 	echo "
 Updated Hosting RR: $hostingRR"
 	echo "Enter 0 to exit"
+	export hostingRR
 	read c
 		if [[ $c == "0" ]]; then
 			exit
 		fi
 else
-	menu "$chat" "$domain" "$username"
+	menu "$chat" "$domain" "$username" "$hostingRR"
 fi
