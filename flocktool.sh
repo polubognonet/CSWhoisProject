@@ -37,13 +37,14 @@ domain="..."
 chat="..."
 username="..."
 datenow=`date +%H`
+datafromfile=$(<data.txt)
 
 ##
 # Functions
 ##
 
+
 function checkDate () {
- datafromfile=$(<data.txt)
  hourfromtext=${datafromfile//[!0-9]/}
  if (( $datenow > $hourfromtext )); then
  	difference= expr $datenow - $hourfromtext
@@ -97,7 +98,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please synchronize the DNS zone for the domain name.
+@$currentHostingRR Hello there! Please synchronize the DNS zone for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -122,7 +123,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Could you check if we have a backup for the hosting account?
+@$currentHostingRR Hello there! Could you check if we have a backup for the hosting account?
 
 # Chat ID: $chat
 # Domain: $domain
@@ -146,7 +147,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please submit a FU for the client.
+@$currentHostingRR Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
@@ -168,7 +169,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please add the domain name as addon to the hosting account.
+@$currentHostingRR Hello there! Please add the domain name as addon to the hosting account.
 
 # Chat ID: $chat
 # Username: $username (verified)
@@ -192,7 +193,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please resend Hosting Welcome email for the client.
+@$currentHostingRR Hello there! Please resend Hosting Welcome email for the client.
 
 # Chat ID: $chat
 # Main Domain: $domain
@@ -215,7 +216,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create all necessary PE records for the domain name.
+@$currentHostingRR Hello there! Please create all necessary PE records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -238,7 +239,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create Google Workspace MX records for the domain name.
+@$currentHostingRR Hello there! Please create Google Workspace MX records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -262,7 +263,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
+@$currentHostingRR Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -287,7 +288,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please check if there are any blocks for the IP address.
+@$currentHostingRR Hello there! Please check if there are any blocks for the IP address.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -312,7 +313,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Could you check the reason of suspension for the hosting account?
+@$currentHostingRR Hello there! Could you check the reason of suspension for the hosting account?
 
 # Chat ID: $chat
 # Domain: $domain
@@ -335,7 +336,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please enable the SSH access for the client.
+@$currentHostingRR Hello there! Please enable the SSH access for the client.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -786,8 +787,19 @@ echo -ne "
 # author: Mikhail Kost
 # version: 0.1.6
 
-# Last Hosting RR update: $lasthour hours.
+"
 
+if (( lasthour <= 8 )); then
+	echo "$(ColorBlue '!') Last Hosting RR update: $lasthour hours. $(ColorBlue '!')"
+	currentHostingRR=$(head -n 1 data.txt)
+elif (( lasthour > 8 )); then
+	echo "$(ColorBlue '!') Last Hosting RR was updated more than 8 hours ago! $(ColorBlue '!')"
+	currentHostingRR=''
+fi
+
+
+
+echo -ne "
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
 
@@ -987,14 +999,16 @@ $(ColorBlue 'Choose an option(0-2):') <=== Enter the required number and press '
 
 After that, you will be forwarded to another menu with the options to select.
 
-FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').
+FlockTool can accept some arguments when you are executing a script. For example, $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev').s
 After this command, script will use the $(ColorBlue 'namecheap.com')  as domain name, $(ColorBlue 'VQR-833-40788') as chat ID and $(ColorBlue 'webdev') as Username. These details will be changed atomatically for your canned replies.
+
+What is more, it is possible to set current Hosting RR on the shift by using the $(ColorBlue './flocktool.sh setRR') command. After that, the required inormation will be inserted in database.
 
 Here it is an example:
 
 $(ColorLightRed '---------------------------------------------------')
 
-@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
+@$(ColorBlue 'Mikhail Kost') Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
 
 # Chat ID: $(ColorBlue 'VQR-833-40788')
 # Domain: $(ColorBlue 'namecheap.com')
@@ -1019,12 +1033,14 @@ $(ColorBlue 'Enter 0 to go back:')"
  }
 
 if [[ $1 == "setRR" ]]; then
-	echo "Please enter Hosting RR on this shift:"
+	echo "
+$(ColorGreen 'Please enter Hosting RR on this shift:')"
 	read hostingRR
 	echo $hostingRR > data.txt
 	currentdata=`date +%H`
 	echo $currentdata >> data.txt
-	echo "Updated Hosting RR: $hostingRR"
+	echo "
+Updated Hosting RR: $hostingRR"
 	echo "Enter 0 to exit"
 	read c
 		if [[ $c == "0" ]]; then
