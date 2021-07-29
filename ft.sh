@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## author: Mikhail Kost
-## version: 0.1.6.1
+## version: 0.2
 ## This script contains details in order to make the communication in Flock easier.
 
 ##
@@ -769,7 +769,7 @@ echo -ne "
 # This script is created in order to make the communication in Flock rooms easier and faster
 # Contact me if you have any: feedbacks / ideas to implement / bug reports
 # author: Mikhail Kost
-# version: 0.1.6
+# version: 0.2
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
