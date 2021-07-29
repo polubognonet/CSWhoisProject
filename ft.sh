@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## author: Mikhail Kost
-## version: 0.2
+## version: 0.2.1
 ## This script contains details in order to make the communication in Flock easier.
 
 ##
@@ -76,6 +76,10 @@ function setValues() {
 
 }
 
+##
+# Database
+##
+
 function syncTheDNS() {
   echo -ne "
 
@@ -83,12 +87,11 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please synchronize the DNS zone for the domain name.
+@$hostingRR Hello there! Please synchronize the DNS zone for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
-# Required server:
 
 Thank you in advance!
 
@@ -108,12 +111,11 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Could you check if we have a backup for the hosting account?
+@$hostingRR Hello there! Could you check if we have a backup for the hosting account?
 
 # Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
-# Hosting: Shared/EasyWP
 
 Thank you in advance!
 
@@ -132,7 +134,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please submit a FU for the client.
+@$hostingRR Hello there! Please submit a FU for the client.
 
 # Chat ID: $chat
 # Description:
@@ -154,7 +156,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please add the domain name as addon to the hosting account.
+@$hostingRR Hello there! Please add the domain name as addon to the hosting account.
 
 # Chat ID: $chat
 # Username: $username (verified)
@@ -178,7 +180,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please resend Hosting Welcome email for the client.
+@$hostingRR Hello there! Please resend Hosting Welcome email for the client.
 
 # Chat ID: $chat
 # Main Domain: $domain
@@ -201,7 +203,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create all necessary PE records for the domain name.
+@$hostingRR Hello there! Please create all necessary PE records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -224,7 +226,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create Google Workspace MX records for the domain name.
+@$hostingRR Hello there! Please create Google Workspace MX records for the domain name.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -248,7 +250,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
+@$hostingRR Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -273,9 +275,8 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please check if there are any blocks for the IP address.
+@$hostingRR Hello there! Please check if there are any blocks for the IP address.
 
-# Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
 # IP address:
@@ -298,9 +299,8 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Could you check the reason of suspension for the hosting account?
+@$hostingRR Hello there! Could you check the reason of suspension for the hosting account?
 
-# Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
 
@@ -321,7 +321,7 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 ---------------------------------------------------
 
-@ Hello there! Please enable the SSH access for the client.
+@$hostingRR Hello there! Please enable the SSH access for the client.
 
 # Chat ID: $chat
 # Domain: $domain
@@ -343,7 +343,6 @@ function paypalInvoice() {
 
 @online Hello there! Please check if the PayPal Invoice ID is a match with the Username provided below.
 
-# Chat ID: $chat
 # Username: $username
 # PayPal Invoice ID:
 
@@ -460,6 +459,29 @@ $(ColorRed 'Please do not forget to make sure that the account is verified.')
 # Chat ID: $chat
 # Username: $username (verified)
 # Amount to be refunded:
+
+Thank you in advance!
+
+---------------------------------------------------
+ $(ColorBlue 'Enter 0 to go back:')"
+ read b
+ if [[ $b == "0" ]]; then
+  billing_menu "$chat" "$domain"; "$username"
+ fi
+}
+
+function bitcoinCheck() {
+	echo -ne "
+
+$(ColorRed 'Please do not forget to make sure that the account is verified.')
+
+---------------------------------------------------
+
+@online Hello there! Client claims that there are some issues with the Bitcoin top-up transaction. Could you check it, please?
+
+# Chat ID: $chat
+# Username: $username (verified)
+# Transaction ID:
 
 Thank you in advance!
 
@@ -760,6 +782,10 @@ Thank you in advance!
  fi
 }
 
+##
+# Menus
+##
+
 setValues "$1" "$2" "$3" "$defvalue"
 
 menu(){
@@ -769,7 +795,7 @@ echo -ne "
 # This script is created in order to make the communication in Flock rooms easier and faster
 # Contact me if you have any: feedbacks / ideas to implement / bug reports
 # author: Mikhail Kost
-# version: 0.2
+# version: 0.2.1
 
 $(ColorBlue 'Chat ID'): $chat , $(ColorBlue 'Domain'): $domain , $(ColorBlue 'Username'): $username
 ---------------------------------------------------
@@ -820,7 +846,7 @@ $(ColorGreen '11)') Enable SSH.
 
 $(ColorGreen '0)') Back
 
-$(ColorBlue 'Choose an option(0-10):')"
+$(ColorBlue 'Choose an option(0-11):')"
     read a
     case $a in
       1) syncTheDNS ;;
@@ -850,13 +876,14 @@ $(ColorGreen '3)') Ask for the FU.
 $(ColorGreen '4)') Change the Billing Cycle for the hosting account.
 $(ColorGreen '5)') Payment postponement request.
 $(ColorGreen '6)') Deposit/Refund withdrawal request.
-$(ColorGreen '7)') Lost credit card charges.
-$(ColorGreen '8)') Change of the payment source.
-$(ColorGreen '9)') Check the credit card expiration date for matches.
+$(ColorGreen '7)') Check Bitcoin transaction.
+$(ColorGreen '8)') Lost credit card charges.
+$(ColorGreen '9)') Change of the payment source.
+$(ColorGreen '10)') Check the credit card expiration date for matches.
 
 $(ColorGreen '0)') Back
 
-$(ColorBlue 'Choose an option(0-9):')"
+$(ColorBlue 'Choose an option(0-10):')"
     read a
     case $a in
       1) paypalInvoice ;;
@@ -865,9 +892,10 @@ $(ColorBlue 'Choose an option(0-9):')"
       4) changeBillingCycle ;;
       5) postponePayment ;;
       6) refundRequest ;;
-      7) creditCardCharges ;;
-      8) paymentSourceChange ;;
-      9) creditCardExp ;;
+			7) bitcoinCheck;;
+      8) creditCardCharges ;;
+      9) paymentSourceChange ;;
+      10) creditCardExp ;;
       0) menu "$chat" "$domain" "$username";;
       *) echo -e $red"Wrong option. Exit."$clear; exit 0;;
     esac
@@ -963,7 +991,7 @@ function howtouse() {
 
   	 $(ColorLightRed 'How to use FlockTool')
 
-FlockTool is an easy-coded script that is used in order to make the communication between CS deparments easier.
+FlockTool is an easy script that is used in order to make the communication between CS deparments easier.
 There are different menus where you can choose the way you would like to proceed.
 
 $(ColorBlue 'Choose an option(0-2):') <=== Enter the required number and press 'Enter'
@@ -975,21 +1003,24 @@ After this command, script will use the $(ColorBlue 'namecheap.com')  as domain 
 
 Here it is an example:
 
-$(ColorLightRed '---------------------------------------------------')
 
-@ Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:
+$(ColorLightRed '-')\$ $(ColorBlue './flocktool.sh namecheap.com VQR-833-40788 webdev')
 
-# Chat ID: $(ColorBlue 'VQR-833-40788')
-# Domain: $(ColorBlue 'namecheap.com')
-# Username: $(ColorBlue 'webdev') (verified)
-# Records that should be created:
+$(ColorGreen '# Chat ID: VQR-833-40788')
+$(ColorGreen '# # Domain: namecheap.com')
+$(ColorGreen '# Username: webdev (verified)')
 
-Thank you in advance!
 
-$(ColorLightRed '---------------------------------------------------')
+It is possible to set the Hosting RR for the FlockTool. In order to do so, use this command: $(ColorBlue 'export hostingRR="..."') (change ... with the current Hosting RR name.)
+For example:
 
-If you have any comments or bug reports, feel free to contact me (Mikhail Kost) via Flock or $(ColorBlue 'mikhail.kost@namecheap.com') email address (please add $(ColorBlue 'Script Feedback') to the subject of your email).
-What is more, I am very excited to check your ideas that could be impletemented here.
+
+$(ColorLightRed '-')\$ $(ColorBlue 'export hostingRR="Best Hosting RR"')
+
+$(ColorGreen '@Best Hosting RR Hello there! Please create host records for the domain name. It is pointed to our hosting nameservers:')
+
+
+If you have any comments or bug reports, feel free to contact me (Mikhail Kost) via Flock or $(ColorBlue 'mikhail.kost@namecheap.com') email address (please add '$(ColorBlue 'Script Feedback')' to the subject of your email).
 
 ##############################################################
 
@@ -1001,5 +1032,6 @@ $(ColorBlue 'Enter 0 to go back:')"
 	fi
  }
 
+## Start
 
 menu "$chat" "$domain" "$username"
