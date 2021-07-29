@@ -38,47 +38,43 @@ chat="..."
 username="..."
 
 ##
-# Functions
+# Database
 ##
 
 function setValues() {
-  for i in $1 $2 $3
-  do
-    dot="\."
-    dotandslash="\.\-"
-    if [[ $i =~ $dot ]] || [[ $i =~ $dotandslash ]]; then
-        domain=${i:-$defvalue}
-        break;
-      else domain=$defvalue
-     fi
-  done
-  for i in $1 $2 $3
-  do
-    slash="\-"
-    dot="\."
-    if [[ $i =~ $dot ]]; then
-       chat=$defvalue
-       elif [[ $i =~ $slash ]]; then
-       chat=${i:-$defvalue}
-       break
-       else
-         chat=$defvalue
-     fi
-  done
-  for i in $1 $2 $3
-    do
-      if [[ $i =~ ^[a-zA-Z0-9]+$ ]]; then
-         username=${i:-$defvalue}
-         break;
-       else username=$defvalue
-       fi
-    done
+	for i in $1 $2 $3
+	do
+		dot="\."
+		dotandslash="\.\-"
+		if [[ $i =~ $dot ]] || [[ $i =~ $dotandslash ]]; then
+				domain=${i:-$defvalue}
+				break;
+			else domain=$defvalue
+		 fi
+	done
+	for i in $1 $2 $3
+	do
+		slash="\-"
+		dot="\."
+		if [[ $i =~ $dot ]]; then
+			 chat=$defvalue
+			 elif [[ $i =~ $slash ]]; then
+			 chat=${i:-$defvalue}
+			 break
+			 else
+				 chat=$defvalue
+		 fi
+	done
+	for i in $1 $2 $3
+		do
+			if [[ $i =~ ^[a-zA-Z0-9]+$ ]]; then
+				 username=${i:-$defvalue}
+				 break;
+			 else username=$defvalue
+			 fi
+		done
 
 }
-
-##
-# Database
-##
 
 function syncTheDNS() {
   echo -ne "
@@ -89,7 +85,6 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 @$hostingRR Hello there! Please synchronize the DNS zone for the domain name.
 
-# Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
 
@@ -113,7 +108,6 @@ $(ColorRed 'Please do not forget to mention the responsible person in the Flock 
 
 @$hostingRR Hello there! Could you check if we have a backup for the hosting account?
 
-# Chat ID: $chat
 # Domain: $domain
 # Username: $username (verified)
 
